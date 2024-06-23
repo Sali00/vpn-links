@@ -2,7 +2,7 @@ name: Update Data
 
 on:
   schedule:
-    - cron: "0 */2 * * *"  # هر دو ساعت اجرا می شود
+    - cron: "10 * * * *"  # هر دو ساعت اجرا می شود
 
 jobs:
   update-data:
