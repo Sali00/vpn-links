@@ -1,0 +1,26 @@
+name: Copy Links
+on:
+  schedule:
+    - cron: '30 * * * *' # Executes at 30 minutes past the hour.
+jobs:
+  copy-links:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository code
+      uses: actions/checkout@v2
+
+    - name: Download first link
+      run: |
+        curl -sSL "${{ env.LINK1_URL }}" > link1.txt
+
+    - name: Download second link
+      run: |
+        curl -sSL "${{ env.LINK2_URL }}" > link2.txt
+
+    - name: Set secrets
+      run: |
+        echo "::set-output name=Link1::$(cat link1.txt)"
+        echo "::set-output name=Link2::$(cat link2.txt)"
+
+    - name: Cleanup
+      run: rm link1.txt link2.txt
