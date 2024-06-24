@@ -1,28 +1,27 @@
-name: Download and Save Text
+name: Subscription Update
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  schedule:
+    - cron: '*/90 * * * *'
 
+  #workflow_dispatch:
 jobs:
-  download_and_save:
+  UpdateSub:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository code
+      - name: Check The Code
         uses: actions/checkout@v2
-
-      - name: Download text from link
+      - name: Get Files
         run: |
-          curl -sSL "https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/splitted/channels" > link1.txt
-
-      - name: Append text to existing file
+          curl -o vmess.txt -LJO "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/vmess"
+          curl -o vless.txt -LJO "https://raw.githubusercontent.com/yebekhe/TelegramV2rayCollector/main/sub/base64/vless"
+      - name: Push And Update Files
         run: |
-          echo "${{ steps.download_text.outputs.text }}" >> existing_file.txt
-
-      - name: Set secrets
-        run: |
-          echo "::set-output name=DownloadedText::$(cat downloaded_text.txt)"
-
-      - name: Cleanup
-        run: rm downloaded_text.txt
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add .
+          git commit -m "🚀Servers Updated - $(TZ='Asia/Tehran' date '+%Y-%m-%d %H:%M:%S') Asia/Tehran"
+          git push
