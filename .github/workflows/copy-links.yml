@@ -14,7 +14,7 @@ jobs:
 
       - name: Download text from link
         run: |
-          curl -sSL "${{ env.LINK_URL }}" > downloaded_text.txt
+          curl -sSL "https://raw.githubusercontent.com/soroushmirzaei/telegram-configs-collector/main/splitted/channels" > downloaded_text.txt
 
       - name: Append text to existing file
         run: |
