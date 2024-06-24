@@ -1,26 +1,28 @@
-name: Copy Links
+name: Download and Save Text
+
 on:
-  schedule:
-    - cron: '30 * * * *' # Executes at 30 minutes past the hour.
+  push:
+    branches:
+      - main
+
 jobs:
-  copy-links:
+  download_and_save:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository code
-      uses: actions/checkout@v2
+      - name: Checkout repository code
+        uses: actions/checkout@v2
 
-    - name: Download first link
-      run: |
-        curl -sSL "${{ env.LINK1_URL }}" > link1.txt
+      - name: Download text from link
+        run: |
+          curl -sSL "${{ env.LINK_URL }}" > downloaded_text.txt
 
-    - name: Download second link
-      run: |
-        curl -sSL "${{ env.LINK2_URL }}" > link2.txt
+      - name: Append text to existing file
+        run: |
+          echo "${{ steps.download_text.outputs.text }}" >> existing_file.txt
 
-    - name: Set secrets
-      run: |
-        echo "::set-output name=Link1::$(cat link1.txt)"
-        echo "::set-output name=Link2::$(cat link2.txt)"
+      - name: Set secrets
+        run: |
+          echo "::set-output name=DownloadedText::$(cat downloaded_text.txt)"
 
-    - name: Cleanup
-      run: rm link1.txt link2.txt
+      - name: Cleanup
+        run: rm downloaded_text.txt
